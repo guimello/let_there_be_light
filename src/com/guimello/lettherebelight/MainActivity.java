@@ -14,7 +14,7 @@ public class MainActivity extends Activity {
 
 	private static final String TAG = MainActivity.class.getSimpleName();
 	private static final String LIGHT_ON_TAG = "LIGHT_ON";
-	
+
 	private Camera camera;
 	private Parameters cameraParameters;
 	private List<String> flashModes;
@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-		
+
 		startCamera();
 	}
 
@@ -48,58 +48,58 @@ public class MainActivity extends Activity {
 
 				if (cameraParameters == null) return;
 
-			    flashModes = cameraParameters.getSupportedFlashModes();
+				flashModes = cameraParameters.getSupportedFlashModes();
 			} catch (RuntimeException e) {
 				Log.i(TAG, "Camera.open() failed: " + e.getMessage());
 			}
-	    }
+		}
 	}
-	
+
 	public void toggleLight(View view) {
 		toggleLight();
 	}
-	
+
 	private void toggleLight() {
 		if (lightOn) {
 			turnLightOff();
-	    } else {
-	    	turnLightOn();
-	    }
+		} else {
+			turnLightOn();
+		}
 	}
-	
+
 	private void turnLightOn() {
 		if (camera == null) {
-	    	Toast.makeText(this, R.string.camere_not_found, Toast.LENGTH_LONG).show();
-	    	return;
-	    }
-	    
-	    lightOn = true;
-	    
-	    if (!isFlashSupported()) return;
+			Toast.makeText(this, R.string.camere_not_found, Toast.LENGTH_LONG).show();
+			return;
+		}
 
-	    String currentFlashMode = cameraParameters.getFlashMode();
-	    Log.i(TAG, "Flash mode: " + currentFlashMode);
-	    Log.i(TAG, "Flash modes: " + flashModes);
+		lightOn = true;
 
-	    // Turn on the flash
-	    if (flashModes.contains(Parameters.FLASH_MODE_TORCH)) {
-	    	enableCameraFlash();
-	    } else {
-	    	Toast.makeText(this,R.string.flash_not_supported, Toast.LENGTH_LONG).show();
-	    	Log.e(TAG, "FLASH_MODE_TORCH not supported");
-	    }
+		if (!isFlashSupported()) return;
+
+		String currentFlashMode = cameraParameters.getFlashMode();
+		Log.i(TAG, "Flash mode: " + currentFlashMode);
+		Log.i(TAG, "Flash modes: " + flashModes);
+
+		// Turn on the flash
+		if (flashModes.contains(Parameters.FLASH_MODE_TORCH)) {
+			enableCameraFlash();
+		} else {
+			Toast.makeText(this,R.string.flash_not_supported, Toast.LENGTH_LONG).show();
+			Log.e(TAG, "FLASH_MODE_TORCH not supported");
+		}
 	}
 
 	private void turnLightOff() {
 		if (lightOn) {
 			lightOn = false;
-	      
+
 			if (camera == null || !isFlashSupported()) return;
-			
+
 			String currentFlashMode = cameraParameters.getFlashMode();
 			Log.i(TAG, "Flash mode: " + currentFlashMode);
 			Log.i(TAG, "Flash modes: " + flashModes);
-			
+
 			// Turn on the flash briefly before turning off
 			// This avoids an issues when the flash is on but the flash
 			// mode returned is off
@@ -112,27 +112,27 @@ public class MainActivity extends Activity {
 				Toast.makeText(this, R.string.could_not_turn_flash_off, Toast.LENGTH_LONG).show();
 				Log.e(TAG, "FLASH_MODE_OFF not supported");
 			}
-	    }
+		}
 	}
-	
+
 	private void enableCameraFlash() {
 		if (flashModes.contains(Parameters.FLASH_MODE_TORCH)) {
-	    	cameraParameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-	    	camera.setParameters(cameraParameters);
-	    }
+			cameraParameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
+			camera.setParameters(cameraParameters);
+		}
 	}
-	
+
 	private void disableCameraFlash() {
 		if (flashModes.contains(Parameters.FLASH_MODE_OFF)) {
 			cameraParameters.setFlashMode(Parameters.FLASH_MODE_OFF);
 			camera.setParameters(cameraParameters);
 		}
 	}
-	
+
 	private boolean isFlashSupported() {
 		return flashModes != null;
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
