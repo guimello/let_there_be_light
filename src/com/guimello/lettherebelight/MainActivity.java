@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 public class MainActivity extends Activity {
 	private static final String TAG = MainActivity.class.getSimpleName();
+	private static final String LIGHT_ON_TAG = "LIGHT_ON";
 	
 	private static Camera camera;
 	private boolean lightOn;
@@ -22,6 +23,20 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		getCamera();
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState) {
+		super.onSaveInstanceState(savedInstanceState);
+
+		savedInstanceState.putBoolean(LIGHT_ON_TAG, lightOn);
+	}
+
+	@Override
+	public void onRestoreInstanceState(Bundle savedInstanceState) {
+		super.onRestoreInstanceState(savedInstanceState);
+
+		lightOn = savedInstanceState.getBoolean(LIGHT_ON_TAG);
 	}
 
 	private void getCamera() {
