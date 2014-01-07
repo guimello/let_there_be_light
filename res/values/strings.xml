@@ -4,8 +4,8 @@
     <string name="app_name">Let There Be Light</string>
     
     <string name="toggle_button">Toggle light</string>
-    
-    <string name="flashlight">Flashlight</string>
-    <string name="permdesc_flashlight">Let there be light</string>
+    <string name="camere_not_found">Camera not found</string>
+    <string name="flash_not_supported">Flash (torch) not supported</string>
+    <string name="could_not_turn_flash_off">Unable to turn the flash off</string>
 
 </resources>

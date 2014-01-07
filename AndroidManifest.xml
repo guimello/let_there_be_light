@@ -7,13 +7,6 @@
     <uses-sdk
         android:minSdkVersion="14"
         android:targetSdkVersion="18" />
-    
-    <!-- Allows access to the flashlight -->
- 	<!-- <permission android:name="android.permission.FLASHLIGHT"
-             android:permissionGroup="android.permission-group.HARDWARE_CONTROLS"
-             android:protectionLevel="normal"
-             android:label="@string/flashlight"
-             android:description="@string/flashlight" />-->
  	
  	<uses-permission android:name="android.permission.CAMERA"></uses-permission>
 

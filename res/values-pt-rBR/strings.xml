@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Que haja luz</string>
+    
+    <string name="toggle_button">Ligar/Desligar flash</string>
+    <string name="camere_not_found">Câmera não encontrada</string>
+    <string name="flash_not_supported">Flash não suportado</string>
+    <string name="could_not_turn_flash_off">Não foi possível desligar o flash</string>
+
+</resources>
