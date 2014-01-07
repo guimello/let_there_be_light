@@ -16,6 +16,8 @@ public class MainActivity extends Activity {
 	private static final String LIGHT_ON_TAG = "LIGHT_ON";
 	
 	private Camera camera;
+	private Parameters cameraParameters;
+	private List<String> flashModes;
 	private boolean lightOn;
 
 	@Override
@@ -42,6 +44,11 @@ public class MainActivity extends Activity {
 		if (camera == null) {
 			try {
 				camera = Camera.open();
+
+				cameraParameters = camera.getParameters();
+			    if (cameraParameters == null) return;
+			    
+			    flashModes = cameraParameters.getSupportedFlashModes();
 			} catch (RuntimeException e) {
 				Log.i(TAG, "Camera.open() failed: " + e.getMessage());
 			}
@@ -68,22 +75,16 @@ public class MainActivity extends Activity {
 	    
 	    lightOn = true;
 	    
-	    Parameters parameters = camera.getParameters();
-	    if (parameters == null) return;
-	    
-	    List<String> flashModes = parameters.getSupportedFlashModes();
-	    // Check if camera flash exists
-	    if (flashModes == null) return;
+	    if (!isFlashSupported()) return;
 
-	    String flashMode = parameters.getFlashMode();
+	    String flashMode = cameraParameters.getFlashMode();
 
 	    Log.i(TAG, "Flash mode: " + flashMode);
 	    Log.i(TAG, "Flash modes: " + flashModes);
 
 	    // Turn on the flash
 	    if (flashModes.contains(Parameters.FLASH_MODE_TORCH)) {
-	    	parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-	    	camera.setParameters(parameters);
+	    	enableCameraFlash();
 	    } else {
 	    	Toast.makeText(
 	    		this,
@@ -99,16 +100,9 @@ public class MainActivity extends Activity {
 		if (lightOn) {
 			lightOn = false;
 	      
-			if (camera == null) return;
-	      
-			Parameters parameters = camera.getParameters();
-			if (parameters == null) return;
-	      
-			List<String> flashModes = parameters.getSupportedFlashModes();
-			// Check if camera flash exists
-			if (flashModes == null) return;
+			if (camera == null || !isFlashSupported()) return;
 			
-			String flashMode = parameters.getFlashMode();
+			String flashMode = cameraParameters.getFlashMode();
 
 			Log.i(TAG, "Flash mode: " + flashMode);
 			Log.i(TAG, "Flash modes: " + flashModes);
@@ -116,20 +110,34 @@ public class MainActivity extends Activity {
 			// Turn on the flash briefly before turning off
 			// This avoids an issues when the flash is on but the flash
 			// mode returned is off
-		    if (flashModes.contains(Parameters.FLASH_MODE_TORCH)) {
-		    	parameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
-		    	camera.setParameters(parameters);
-		    }
+			enableCameraFlash();
 
 			// Turn off the flash
 			if (flashModes.contains(Parameters.FLASH_MODE_OFF)) {
-				parameters.setFlashMode(Parameters.FLASH_MODE_OFF);
-				camera.setParameters(parameters);
+				disableCameraFlash();
 			} else {
 				Toast.makeText(this, "Could not turn off the flash", Toast.LENGTH_LONG).show();
 				Log.e(TAG, "FLASH_MODE_OFF not supported");
 			}
 	    }
+	}
+	
+	private void enableCameraFlash() {
+		if (flashModes.contains(Parameters.FLASH_MODE_TORCH)) {
+	    	cameraParameters.setFlashMode(Parameters.FLASH_MODE_TORCH);
+	    	camera.setParameters(cameraParameters);
+	    }
+	}
+	
+	private void disableCameraFlash() {
+		if (flashModes.contains(Parameters.FLASH_MODE_OFF)) {
+			cameraParameters.setFlashMode(Parameters.FLASH_MODE_OFF);
+			camera.setParameters(cameraParameters);
+		}
+	}
+	
+	private boolean isFlashSupported() {
+		return flashModes != null;
 	}
 	
 	@Override
