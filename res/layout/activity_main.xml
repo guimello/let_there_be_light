@@ -9,7 +9,7 @@
     tools:context=".MainActivity" >
 
     <Button
-        android:id="@+id/stop"
+        android:id="@+id/toggleButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="0.45"
